@@ -4,26 +4,57 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 const smooth=x=>{x=clamp(x);return x*x*(3-2*x)};
 const routeData=[
- {key:'muine',name:'Муйне',day:'Старт · день 1',copy:'В 04:00 группа отправляется из Муйне в аэропорт Хошимина. Впереди внутренний перелёт на север.',meta:'Трансфер 04:00–07:30',img:'muine-photo.jpg',alt:'Песчаные дюны в районе Муйне',x:.714,y:.792,link:'#day1'},
- {key:'vandon',name:'Хошимин и Вандон',day:'Перелёт · день 1',copy:'После регистрации — рейс Хошимин — Вандон. Из аэропорта группу везут к месту отправления корабля в Халонге.',meta:'09:10–11:10 · затем трансфер 11:30–12:10',img:'hcm-photo.jpg',alt:'Панорама Хошимина',x:.623,y:.175,link:'#day1'},
- {key:'halong',name:'Халонг',day:'Бухта · день 1',copy:'Частный круиз по маршруту № 1: пещеры Тхиен-Кунг и Дау-Го, острова и скальные формы. Ланч-бокс на корабле.',meta:'12:30–16:30 · вечером слипбас в Сапу',img:'halong-photo.jpg',alt:'Корабли и скальные острова Халонга',x:.586,y:.185,link:'#cruise'},
- {key:'sapa',name:'Сапа и Кат-Кат',day:'Горы · день 2',copy:'После ночного переезда — завтрак и раннее заселение. Утром группа гуляет с гидом по Кат-Кат, после обеда посещает Фансипан.',meta:'Кат-Кат 09:00–11:15 · ночь в отеле Сапы',img:'catcat-photo.jpg',alt:'Дома и террасы деревни Кат-Кат',x:.246,y:.101,link:'#day2'},
- {key:'sapa',name:'Фансипан',day:'Горный комплекс · день 2',copy:'Канатная дорога и прогулка среди горных панорам. Если погода не позволяет, Фансипан заменяется SPA на 3–4 часа без доплаты.',meta:'План 13:00–16:00 · посещение зависит от погоды',img:'fansipan-real.jpg',alt:'Канатная дорога Фансипан в облаках',x:.233,y:.108,link:'#day2'},
- {key:'hanoi',name:'Ханой и возвращение',day:'Дорога домой · день 3',copy:'После свободного утра в Сапе — трансфер в аэропорт Ханоя, перелёт в Хошимин и возвращение в отель Муйне.',meta:'19:30–21:30 · Муйне около 02:00 дня 4',img:'hanoi-photo.jpg',alt:'Городская панорама Ханоя',x:.453,y:.181,link:'#day3'}
+ {key:'muine',name:'Муйне',label:'Муйне',day:'Старт · день 1',copy:'Встреча гостей в Муйне в 04:00. Трансфер в аэропорт Хошимина открывает путешествие с юга на север.',meta:'04:00–07:30 · наземный трансфер',img:'muine-photo.jpg',alt:'Песчаные дюны в районе Муйне',x:.714,y:.792,link:'#day1'},
+ {key:'hcm',name:'Хошимин',label:'Хошимин',day:'Пересадка · день 1',copy:'Регистрация и посадка на внутренний рейс в Вандон. Хошимин — транспортная точка маршрута; городская экскурсия в пакет не включена.',meta:'07:30–09:10 · аэропорт и посадка',img:'hcm-photo.jpg',alt:'Панорама Хошимина',x:.543,y:.799,link:'#day1'},
+ {key:'vandon',name:'Вандон',label:'Вандон',day:'На севере · день 1',copy:'После перелёта группу встречают в аэропорту Вандона и везут на причал Халонга. Все переезды связаны в одну программу с сопровождением гида.',meta:'Рейс 09:10–11:10 · трансфер 11:30–12:10',img:'vandon-airport.jpg',alt:'Терминал международного аэропорта Вандон',x:.623,y:.175,link:'#day1'},
+ {key:'halong',name:'Халонг',label:'Халонг',day:'Бухта островов · день 1',copy:'Частный корабль для нашей группы. Маршрут № 1 соединяет две пещеры и скальные острова; на борту предусмотрен ланч-бокс.',meta:'12:30–16:30 · четыре часа в бухте',img:'halong-photo.jpg',alt:'Корабли и скальные острова Халонга',x:.586,y:.185,link:'#cruise'},
+ {key:'sapa',name:'Сапа',label:'Сапа',day:'Горный город · день 2',copy:'Ночью — VIP-слипбас из Халонга. Утром — завтрак, раннее заселение и короткий отдых перед прогулкой. В Сапе предусмотрена одна ночь в отеле.',meta:'Прибытие около 07:00 · отель ещё выбирается',img:'catcat-photo.jpg',alt:'Долина и деревня в районе Сапы',x:.246,y:.101,link:'#day2'},
+ {key:'sapa',name:'Кат-Кат',label:'Кат-Кат',day:'Деревня и водопад · день 2',copy:'Прогулка с русскоязычным гидом по деревне Кат-Кат: горный пейзаж, дорожки и водопад. На маршруте встречаются лестницы и неровные участки.',meta:'09:00–11:15 · затем включённый обед',img:'catcat-waterfall.jpg',alt:'Водопад в деревне Кат-Кат',x:.242,y:.106,link:'#day2'},
+ {key:'sapa',name:'Фансипан',label:'Фансипан',day:'Выше облаков · день 2',copy:'Канатная дорога и прогулка по горному комплексу. При неподходящей погоде — SPA на 3–4 часа без доплаты; объект и процедуры ещё выбираются.',meta:'План 13:00–16:00 · зависит от погоды',img:'fansipan-real.jpg',alt:'Канатная дорога Фансипан над горной долиной',x:.233,y:.108,link:'#mountain'},
+ {key:'hanoi',name:'Ханой',label:'Возвращение',day:'Возвращение · день 3',copy:'Свободное утро в Сапе, выезд после 12:00 и трансфер в аэропорт Ханоя. Перелёт в Хошимин и возвращение к отелям Муйне около 02:00 дня 4.',meta:'19:30–21:30 · обратный рейс по программе',img:'hanoi-photo.jpg',alt:'Городская панорама Ханоя',x:.453,y:.181,link:'#day3'}
 ];
 const route=$('.route-scene'),world=$('.map-world'),dest=$('.destination'),hero=$('.hero-scene'),heroPics=$$('.hero-photo'),mountain=$('.mountain-scene');
-let previousKey='',heroIndex=-1,requested=false;
-const beats=$('.route-beats');routeData.forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.textContent=['Муйне','Перелёт','Халонг','Сапа','Фансипан','Возврат'][i];b.setAttribute('aria-label','Этап: '+d.name);b.addEventListener('click',()=>{if(reduced){setDestination(d,String(i));return;}const top=route.getBoundingClientRect().top+scrollY;scrollTo({top:top+(route.offsetHeight-innerHeight)*(i+.5)/6,behavior:reduced?'auto':'smooth'})});beats.append(b)});
-function setDestination(d,key){if(previousKey===key)return;previousKey=key;const pic=$('img',dest);pic.src=d.img;pic.alt=d.alt;if(!reduced)pic.animate([{opacity:.3,transform:'scale(1.07)'},{opacity:1,transform:'scale(1.03)'}],{duration:650,easing:'ease-out'});$('.destination-day').textContent=d.day;$('h3',dest).textContent=d.name;$('.destination-copy').textContent=d.copy;$('.destination-meta').textContent=d.meta;$('.destination-link').href=d.link;$$('.map-node').forEach(n=>n.classList.toggle('active',n.dataset.place===d.key));}
-const overview={key:'',name:'От моря к горам',day:'Маршрут целиком',copy:'Муйне — Хошимин — Вандон — Халонг — Сапа — Ханой — Хошимин — Муйне.',meta:'3 программных дня · около 70 часов в пути',img:'halong-photo.jpg',alt:'Бухта Халонг',link:'#program'};
-function draw(){requested=false;const vh=innerHeight;$('.reading-progress').style.transform=`scaleX(${clamp(scrollY/(document.documentElement.scrollHeight-vh))})`;
- if(!reduced){const hr=hero.getBoundingClientRect();const hp=clamp(-hr.top/(hero.offsetHeight-vh));const hi=Math.min(2,Math.floor(hp*3));if(hi!==heroIndex){heroIndex=hi;heroPics.forEach((im,i)=>im.classList.toggle('active',i===hi));$('.hero-place').textContent=['Бухта Халонг','Деревня Кат-Кат','Канатная дорога Фансипан'][hi]}heroPics.forEach(im=>im.style.transform=`scale(${1.04+hp*.12}) translateY(${hp*-2}%)`);$('.hero-copy').style.transform=`translateY(${-hp*45}px)`;
- const r=route.getBoundingClientRect(),p=clamp(-r.top/(route.offsetHeight-vh));let v=p*6,i=Math.min(5,Math.floor(v)),f=v-i;if(p===1)f=1;const d=routeData[i],amount=smooth(f/.25)*(1-smooth((f-.76)/.24));const isOverview=amount<.12;setDestination(isOverview?overview:d,isOverview?'all':String(i));const z=1+amount*(innerWidth<701?1.3:1.1);const tx=(.5-d.x)*amount*z*65,ty=(.5-d.y)*amount*z*65;world.style.transform=`translate(${tx}%,${ty}%) scale(${z})`;$$('.route-beats button').forEach((b,k)=>b.classList.toggle('active',!isOverview&&k===i));
- const mr=mountain.getBoundingClientRect(),mp=clamp(-mr.top/(mountain.offsetHeight-vh));$('.mountain-stage>img').style.transform=`scale(${1+mp*.14}) translateY(${-mp*4}%)`;
- $$('.photo-window').forEach(el=>{const rr=el.getBoundingClientRect();if(rr.bottom>0&&rr.top<vh)$('img',el).style.transform=`scale(1.08) translateY(${(rr.top/vh-.4)*-12}px)`});
+const landscape=$$('.route-landscape'),beats=$('.route-beats');
+let previousKey='',heroIndex=-1,requested=false,landscapeIndex=0,lastLandscape='halong-photo.jpg';
+const overview={key:'',name:'Весь маршрут',day:'С юга на север и обратно',copy:'Муйне → Хошимин → Вандон → Халонг → Сапа и Фансипан → Ханой → Хошимин → Муйне.',meta:'3 программных дня · группа 6–9 гостей · 650 USD нетто',img:'halong-photo.jpg',alt:'Бухта Халонг',link:'#program'};
+function routeTop(){return route.getBoundingClientRect().top+scrollY}
+function visitBeat(i){if(reduced){setDestination(i<0?overview:routeData[i],i<0?'all':String(i));return}const fraction=i<0?0:(i+.5)/routeData.length;scrollTo({top:routeTop()+(route.offsetHeight-innerHeight)*fraction,behavior:'smooth'})}
+const allButton=document.createElement('button');allButton.type='button';allButton.textContent='Весь путь';allButton.setAttribute('aria-label','Показать весь маршрут');allButton.addEventListener('click',()=>visitBeat(-1));beats.append(allButton);
+routeData.forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.textContent=d.label;b.setAttribute('aria-label','Этап: '+d.name);b.addEventListener('click',()=>visitBeat(i));beats.append(b)});
+function setDestination(d,key){
+ if(previousKey===key)return;
+ const initial=previousKey==='';previousKey=key;
+ const pic=$('img',dest);pic.src=d.img;pic.alt=d.alt;
+ if(d.key||initial){if(lastLandscape!==d.img){const next=1-landscapeIndex;landscape[next].src=d.img;landscape[next].alt=d.alt;landscape[next].classList.add('active');landscape[landscapeIndex].classList.remove('active');landscapeIndex=next;lastLandscape=d.img}}
+ if(!reduced)pic.animate([{opacity:.2,transform:'scale(1.12)'},{opacity:1,transform:'scale(1.03)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
+ $('.destination-day').textContent=d.day;$('h3',dest).textContent=d.name;$('.destination-copy').textContent=d.copy;$('.destination-meta').textContent=d.meta;$('.destination-link').href=d.link;
+ $('.route-counter').textContent=key==='all'?'Весь маршрут':`${Number(key)+1} / ${routeData.length}`;
+ $$('.map-node').forEach(n=>{const active=n.dataset.place===d.key,label=$('text',n),point=$('circle',n);if(!n.dataset.baseLabel){n.dataset.baseLabel=label.textContent;n.dataset.labelX=label.getAttribute('x');n.dataset.labelY=label.getAttribute('y')}n.classList.toggle('active',active);label.textContent=active?d.name:n.dataset.baseLabel;label.setAttribute('x',active?point.getAttribute('cx'):n.dataset.labelX);label.setAttribute('y',active?Number(point.getAttribute('cy'))-17:n.dataset.labelY);label.setAttribute('text-anchor',active?'middle':'start')});
+ $$('.route-beats button').forEach((b,k)=>{const active=key==='all'?k===0:k===Number(key)+1;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+}
+function draw(){requested=false;const vh=innerHeight;
+ $('.reading-progress').style.transform=`scaleX(${clamp(scrollY/(document.documentElement.scrollHeight-vh))})`;
+ if(reduced)return;
+ const hr=hero.getBoundingClientRect(),hp=clamp(-hr.top/(hero.offsetHeight-vh));
+ if(hr.bottom>0){const hi=Math.min(2,Math.floor(hp*3));if(hi!==heroIndex){heroIndex=hi;heroPics.forEach((im,i)=>im.classList.toggle('active',i===hi));$('.hero-place').textContent=['Бухта Халонг','Деревня Кат-Кат','Канатная дорога Фансипан'][hi]}heroPics.forEach(im=>im.style.transform=`scale(${1.03+hp*.2}) translateY(${hp*-3}%)`);$('.hero-copy').style.transform=`translateY(${-hp*65}px)`;}
+ const r=route.getBoundingClientRect();
+ if(r.top<vh&&r.bottom>0){const p=clamp(-r.top/(route.offsetHeight-vh)),v=p*routeData.length,i=Math.min(routeData.length-1,Math.floor(v)),f=p===1?1:v-i,d=routeData[i];
+  const amount=smooth((f-.08)/.24)*(1-smooth((f-.78)/.22)),isOverview=amount<.09;
+  setDestination(isOverview?overview:d,isOverview?'all':String(i));
+  const z=1+amount*1.65,tx=(.5-d.x)*amount*z*100,ty=(.5-d.y)*amount*z*100;
+  world.style.transform=`translate(${tx}%,${ty}%) scale(${z})`;
+  world.classList.toggle('zoomed',amount>.45);
+  landscape.forEach(im=>im.style.transform=`scale(${1.04+amount*.12}) translateY(${-amount*2}%)`);
+  $('.route-stage').style.setProperty('--camera',amount);
+ }
+ const mr=mountain.getBoundingClientRect(),mp=clamp(-mr.top/(mountain.offsetHeight-vh));if(mr.top<vh&&mr.bottom>0){$('.mountain-stage>img').style.transform=`scale(${1+mp*.2}) translateY(${-mp*4}%)`;$('.mountain-copy').style.transform=`translateY(${-mp*45}px)`;}
+ $$('.photo-window,.day-panorama').forEach(el=>{const rr=el.getBoundingClientRect();if(rr.bottom>0&&rr.top<vh)$('img',el).style.transform=`scale(1.08) translateY(${(rr.top/vh-.4)*-16}px)`});
+ $$('.place-shot').forEach((el,i)=>{const rr=el.getBoundingClientRect();if(rr.bottom>0&&rr.top<vh){const p=clamp((vh-rr.top)/(vh+rr.height));el.style.transform=`translateY(${(p-.5)*(i%2?50:-50)}px)`}});
  const cr=$('.cruise-line').getBoundingClientRect();$('.cruise-line').style.setProperty('--path-offset',String(1200*(1-clamp((vh-cr.top)/(vh*.9)))));
- }}
-function schedule(){if(!requested){requested=true;requestAnimationFrame(draw)}}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);draw();
+}
+function schedule(){if(!requested){requested=true;requestAnimationFrame(draw)}}
+addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);setDestination(overview,'all');draw();
+
 // Reveal individual content parts, with readable no-script and reduced-motion states.
 const revealTargets=$$('.section h2,.section .lead,.section .section-grid>div>p,.intro-media figure,.package-list article,.cruise-points article,.roles article,.launch-list p,.day-detail h3,.timetable li,.risk-list p,.price-ticket,.meeting-checklist');
 if(!reduced&&'IntersectionObserver'in window){document.body.classList.add('motion-enabled');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -20px 0px'});revealTargets.forEach((el,i)=>{el.classList.add('reveal-part');el.style.setProperty('--delay',(i%3)*65+'ms');io.observe(el)})}
