@@ -29,6 +29,7 @@ function setDestination(d,key){
  if(!reduced)pic.animate([{opacity:.2,transform:'scale(1.12)'},{opacity:1,transform:'scale(1.03)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
  $('.destination-day').textContent=d.day;$('h3',dest).textContent=d.name;$('.destination-copy').textContent=d.copy;$('.destination-meta').textContent=d.meta;$('.destination-link').href=d.link;
  $('.route-counter').textContent=key==='all'?'Весь маршрут':`${Number(key)+1} / ${routeData.length}`;
+ $('.route-stage').classList.toggle('is-overview',key==='all');
  $$('.map-node').forEach(n=>{const active=n.dataset.place===d.key,label=$('text',n),point=$('circle',n);if(!n.dataset.baseLabel){n.dataset.baseLabel=label.textContent;n.dataset.labelX=label.getAttribute('x');n.dataset.labelY=label.getAttribute('y')}n.classList.toggle('active',active);label.textContent=active?d.name:n.dataset.baseLabel;label.setAttribute('x',active?point.getAttribute('cx'):n.dataset.labelX);label.setAttribute('y',active?Number(point.getAttribute('cy'))-17:n.dataset.labelY);label.setAttribute('text-anchor',active?'middle':'start')});
  $$('.route-beats button').forEach((b,k)=>{const active=key==='all'?k===0:k===Number(key)+1;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
 }
